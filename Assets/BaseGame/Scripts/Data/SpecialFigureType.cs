@@ -5,7 +5,7 @@ namespace BaseGame.Scripts.Data
         None,
         Heavy,
         Sticky,
-        Exploding,
+        Explosive,
         Frozen
     }
 }

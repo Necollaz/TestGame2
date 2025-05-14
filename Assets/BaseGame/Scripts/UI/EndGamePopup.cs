@@ -35,8 +35,8 @@ namespace BaseGame.Scripts.UI
             while (elapsed < _fadeDuration)
             {
                 elapsed += Time.unscaledDeltaTime;
-                float t = Mathf.Clamp01(elapsed / _fadeDuration);
-                _canvasGroup.alpha = t;
+                float normalizedTime = Mathf.Clamp01(elapsed / _fadeDuration);
+                _canvasGroup.alpha = normalizedTime;
                 
                 yield return null;
             }

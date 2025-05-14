@@ -10,6 +10,8 @@ namespace BaseGame.Scripts.Figure
     {
         [SerializeField, Range(0.1f,1f)] private float _colliderScale = 0.9f;
         
+        private readonly float _triangleCenterFactor = 0.5f;
+        
         private CircleCollider2D _circle;
         private BoxCollider2D _box;
         private PolygonCollider2D _poly;
@@ -56,7 +58,14 @@ namespace BaseGame.Scripts.Figure
                     float w = size.x;
                     float h = size.y;
                     
-                    _poly.SetPath(0, new Vector2[] { new Vector2(0, h * 0.5f), new Vector2(-w * 0.5f, -h * 0.5f), new Vector2( w * 0.5f, -h * 0.5f), });
+                    _poly.SetPath(0, new Vector2[]
+                    { 
+                        new Vector2(0, h * _triangleCenterFactor),
+                        new Vector2(-w * _triangleCenterFactor, -h * _triangleCenterFactor),
+                        new Vector2( w * _triangleCenterFactor, -h * _triangleCenterFactor),
+                        
+                    });
+                    
                     _poly.enabled = true;
                     _activeCollider = _poly;
                     

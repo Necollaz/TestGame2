@@ -15,7 +15,7 @@ MonoBehaviour:
   _shapeType: 0
   _color: 1
   _sweetnessCategory: 5
-  _specialType: 0
+  _specialType: 1
   _sprite: {fileID: 21300000, guid: 0a566799789454f82bf5d81067a74803, type: 3}
   _physicsMaterial: {fileID: 6200000, guid: 8729962b3ede2493b8db3d442c824566, type: 2}
   _mass: 1

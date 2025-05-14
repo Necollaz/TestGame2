@@ -11,24 +11,20 @@ namespace BaseGame.Scripts.UI
     {
         [SerializeField] private List<Image> _slots;
 
+        private readonly float _slotSize = 100f;
+        
         private ActionBarModel _model;
-
-        public int Count => _model.Count;
+        
+        public ActionBarModel Model => _model;
         
         public event Action Full;
         public event Action TripleRemoved;
         
-        private void Awake()
-        {
-            InitializeModel();
-        }
+        private void Awake() => InitializeModel();
         
         public bool AddItem(FigureBehaviour figureBehaviour) => _model.AddItem(figureBehaviour);
 
-        public void Reset()
-        {
-            InitializeModel();
-        }
+        public void Reset() => InitializeModel();
         
         private void InitializeModel()
         {
@@ -50,19 +46,19 @@ namespace BaseGame.Scripts.UI
 
         private void RefreshUI(List<FigureBehaviour> items)
         {
-            for(int i = 0; i < _slots.Count; i++)
+            for (int i = 0; i < _slots.Count; i++)
             {
                 int dataIndex = i < items.Count ? i : -1;
                 int slotIndex = i;
 
-                if(dataIndex >= 0)
+                if (dataIndex >= 0)
                 {
                     FigureData figData = items[dataIndex].Data;
                     Image slot = _slots[slotIndex];
 
                     slot.sprite = figData.Sprite;
                     slot.color = Color.white;
-                    slot.rectTransform.sizeDelta = new Vector2(100f, 100f);
+                    slot.rectTransform.sizeDelta = new Vector2(_slotSize, _slotSize);
                     slot.gameObject.SetActive(true);
                 }
                 else

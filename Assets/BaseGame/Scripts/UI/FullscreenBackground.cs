@@ -29,7 +29,7 @@ namespace BaseGame.Scripts.UI
 
         private void Update()
         {
-            if(Screen.orientation != _lastOrientation)
+            if (Screen.orientation != _lastOrientation)
             {
                 _lastOrientation = Screen.orientation;
                 UpdateSpriteAndAspect();
@@ -41,7 +41,7 @@ namespace BaseGame.Scripts.UI
             bool isPortrait = Screen.height > Screen.width;
             Sprite sprite = isPortrait ? _portraitSprite : _landscapeSprite;
 
-            if(sprite == null)
+            if (sprite == null)
                 return;
             
             _image.sprite = sprite;

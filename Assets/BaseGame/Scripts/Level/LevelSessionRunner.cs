@@ -1,25 +1,20 @@
 using System.Linq;
 using UnityEngine;
 using BaseGame.Scripts.Figure;
+using BaseGame.Scripts.UI;
 
 namespace BaseGame.Scripts.Level
 {
     public class LevelSessionRunner : MonoBehaviour
     {
         [SerializeField] private ResettableSpawner _spawner;
-
+        [SerializeField] private ActionBarView _actionBarView;
+        
         public int ActiveOnField => _spawner.ActiveCount;
 
         private void Start()
         {
             BeginLevel(_spawner.MaxFigures);
-        }
-        
-        public void BeginLevel(int count)
-        {
-            ClearField();
-            
-            _spawner.Spawn(count);
         }
         
         public void ResetLevel(int spawnCount)
@@ -29,23 +24,26 @@ namespace BaseGame.Scripts.Level
             BeginLevel(spawnCount);
         }
         
-        public void RemoveFigure(FigureBehaviour figureBehaviour)
+        public void RemoveFigure(FigureBehaviour figure)
         {
-            if (figureBehaviour == null)
+            if (figure == null)
                 return;
             
-            figureBehaviour.PrepareForRemoval();
-            _spawner.ReturnToPool(figureBehaviour);
+            figure.PrepareForRemoval();
+            _spawner.ReturnToPool(figure);
         }
-
-        private void ClearField()
+        
+        private void BeginLevel(int count)
         {
             _spawner.Stop();
-            foreach (FigureBehaviour figure in GetComponentsInChildren<FigureBehaviour>(true).Where(f => f.IsActive))
+            
+            foreach (FigureBehaviour figure in GetComponentsInChildren<FigureBehaviour>(true).Where(figure => figure.IsActive))
             {
                 figure.PrepareForRemoval();
                 _spawner.ReturnToPool(figure);
             }
+            
+            _spawner.Spawn(count, _actionBarView.Model);
         }
     }
 }

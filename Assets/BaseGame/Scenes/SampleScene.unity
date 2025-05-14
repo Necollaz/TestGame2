@@ -1689,6 +1689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawner: {fileID: 1607392737}
+  _actionBarView: {fileID: 732940642}
 --- !u!114 &1607392737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1702,7 +1703,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnPoint: {fileID: 548542538}
-  _figurePrefab: {fileID: 7799076946459936906, guid: bd19e45ee81e94e3e961aa9c6b15b9fe, type: 3}
+  _figureBehaviourPrefab: {fileID: 7799076946459936906, guid: bd19e45ee81e94e3e961aa9c6b15b9fe, type: 3}
   _templates:
   - {fileID: 11400000, guid: bc68c0053349548df8d0b6215067bab1, type: 2}
   - {fileID: 11400000, guid: b3091ff24b0d84ba9a6b0a63d4bdda60, type: 2}
@@ -1796,10 +1797,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawner: {fileID: 1607392737}
-  _levelSession: {fileID: 1607392736}
+  _levelSessionRunner: {fileID: 1607392736}
   _actionBarView: {fileID: 732940642}
   _resetButton: {fileID: 1689395475}
-  _endGameController: {fileID: 1664494027}
+  _winLoseEvaluator: {fileID: 1664494027}
 --- !u!114 &1664494027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1813,9 +1814,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawner: {fileID: 1607392737}
-  _levelSession: {fileID: 1607392736}
-  _winScreen: {fileID: 2030415790}
-  _loseScreen: {fileID: 691989419}
+  _levelSessionRunner: {fileID: 1607392736}
+  _winPopup: {fileID: 2030415790}
+  _losePopup: {fileID: 691989419}
 --- !u!1 &1689395473
 GameObject:
   m_ObjectHideFlags: 0

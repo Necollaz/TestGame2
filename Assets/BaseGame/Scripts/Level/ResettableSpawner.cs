@@ -5,6 +5,7 @@ using UnityEngine;
 using BaseGame.Scripts.Core;
 using BaseGame.Scripts.Data;
 using BaseGame.Scripts.Figure;
+using BaseGame.Scripts.UI;
 
 namespace BaseGame.Scripts.Level
 {
@@ -21,8 +22,9 @@ namespace BaseGame.Scripts.Level
         [SerializeField] private float _horizontalRange = 5f;
 
         private TripletFactory _factory;
-        private ObjectPool<FigureBehaviour> _pool;
+        private ActionBarModel _barModel;
         private RandomProvider _random;
+        private ObjectPool<FigureBehaviour> _pool;
         private Coroutine _spawnRoutine;
         private IReadOnlyList<FigureData> _spawnList;
         
@@ -30,9 +32,9 @@ namespace BaseGame.Scripts.Level
         private int _totalRequested;
         private bool _isSpawning;
         
-        public int ActiveCount { get; private set; }
         public int TotalRequested => _totalRequested;
         public int MaxFigures => _maxFigures;
+        public int ActiveCount { get; private set; }
         
         public event Action SpawnCompleted;
         public event Action<FigureBehaviour> FigureSpawned;
@@ -44,11 +46,13 @@ namespace BaseGame.Scripts.Level
             _pool = new ObjectPool<FigureBehaviour>(_figureBehaviourPrefab, _maxFigures, transform);
         }
 
-        public void Spawn(int desiredCount)
+        public void Spawn(int desiredCount, ActionBarModel barModel)
         {
+            _barModel = barModel;
+            
             _spawnSessionId++;
             
-            if(_spawnRoutine != null)
+            if (_spawnRoutine != null)
             {
                 StopCoroutine(_spawnRoutine);
                 
@@ -60,8 +64,6 @@ namespace BaseGame.Scripts.Level
             ActiveCount = 0;
             _isSpawning = true;
             
-            Debug.Log($"[Spawner] Prepared {_totalRequested} figures in session #{_spawnSessionId}.");
-            
             _spawnRoutine = StartCoroutine(SpawnCoroutine(_spawnSessionId));
         }
 
@@ -69,7 +71,7 @@ namespace BaseGame.Scripts.Level
         {
             _isSpawning = false;
 
-            if(_spawnRoutine != null)
+            if (_spawnRoutine != null)
             {
                 StopCoroutine(_spawnRoutine);
                 _spawnRoutine = null;
@@ -78,14 +80,14 @@ namespace BaseGame.Scripts.Level
 
         private IEnumerator SpawnCoroutine(int sessionId)
         {
-            foreach(FigureData data in _spawnList)
+            foreach (FigureData data in _spawnList)
             {
                 if (!_isSpawning || sessionId != _spawnSessionId)
                     yield break;
 
                 FigureBehaviour figureBehaviour = _pool.Get();
                 figureBehaviour.transform.position = GetRandomPosition();
-                figureBehaviour.Initialize(data);
+                figureBehaviour.Initialize(data, _barModel);
 
                 ActiveCount++;
                 
@@ -99,8 +101,6 @@ namespace BaseGame.Scripts.Level
             
             _isSpawning = false;
             _spawnRoutine = null;
-            
-            Debug.Log($"[Spawner] SpawnCompleted ({ActiveCount}) in session #{sessionId}.");
             
             SpawnCompleted?.Invoke();
         }
@@ -129,8 +129,6 @@ namespace BaseGame.Scripts.Level
 
             _pool.Return(figureBehaviour);
             ActiveCount = Mathf.Max(0, ActiveCount - 1);
-            
-            Debug.Log($"[Spawner] Returned one in session #{sessionId}, now {ActiveCount}.");
         }
     }
 }
