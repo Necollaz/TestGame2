@@ -1,0 +1,60 @@
+using System.Collections;
+using UnityEngine;
+
+namespace BaseGame.Scripts.UI
+{
+    public class EndGamePopup : MonoBehaviour
+    {
+        [SerializeField] private CanvasGroup _canvasGroup;
+        [SerializeField] private float _fadeDuration = 0.5f;
+
+        private void Awake()
+        {
+            if (_canvasGroup != null)
+            {
+                _canvasGroup.alpha = 0f;
+                _canvasGroup.interactable = false;
+                _canvasGroup.blocksRaycasts = false;
+            }
+        }
+        
+        public void Show()
+        {
+            if (_canvasGroup == null)
+                return;
+            
+            gameObject.SetActive(true);
+            
+            StartCoroutine(FadeIn());
+        }
+
+        private IEnumerator FadeIn()
+        {
+            float elapsed = 0f;
+            
+            while (elapsed < _fadeDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / _fadeDuration);
+                _canvasGroup.alpha = t;
+                
+                yield return null;
+            }
+            
+            _canvasGroup.alpha = 1f;
+            _canvasGroup.interactable = true;
+            _canvasGroup.blocksRaycasts = true;
+        }
+        
+        public void Hide()
+        {
+            if (_canvasGroup == null)
+                return;
+            
+            _canvasGroup.alpha = 0f;
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
+            gameObject.SetActive(false);
+        }
+    }
+}
