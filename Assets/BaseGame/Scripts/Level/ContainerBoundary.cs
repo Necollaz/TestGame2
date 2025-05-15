@@ -43,21 +43,5 @@ namespace BaseGame.Scripts.Level
             
             _edge.points = new[] { topLeftPoint, bottomLeftPoint, bottomRightPoint, topRightPoint };
         }
-        
-        private void OnDrawGizmosSelected()
-        {
-            float halfW = _worldWidth  * 0.5f;
-            float halfH = _worldHeight * 0.5f;
-
-            Vector3 tl = transform.TransformPoint(new Vector3(-halfW + _leftMargin   * _worldWidth, halfH - _topMargin    * _worldHeight));
-            Vector3 bl = transform.TransformPoint(new Vector3(-halfW + _leftMargin   * _worldWidth, -halfH + _bottomMargin * _worldHeight));
-            Vector3 br = transform.TransformPoint(new Vector3( halfW - _rightMargin  * _worldWidth, -halfH + _bottomMargin * _worldHeight));
-            Vector3 tr = transform.TransformPoint(new Vector3( halfW - _rightMargin  * _worldWidth, halfH - _topMargin    * _worldHeight));
-
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(tl, bl);
-            Gizmos.DrawLine(bl, br);
-            Gizmos.DrawLine(br, tr);
-        }
     }
 }
