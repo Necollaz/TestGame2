@@ -1,23 +1,29 @@
 using UnityEngine;
 using BaseGame.Scripts.Level;
 using BaseGame.Scripts.UI;
+using UnityEngine.UI;
 
 namespace BaseGame.Scripts.WinLose
 {
     public class WinLoseEvaluator : MonoBehaviour
     {
         [Header("Game Components")]
-        [SerializeField] private ResettableSpawner _spawner;
+        [SerializeField] private FigureSpawner _spawner;
         [SerializeField] private LevelSessionRunner _levelSessionRunner;
         
         [Header("End Screens")]
-        [SerializeField] private EndGamePopup _winPopup;
-        [SerializeField] private EndGamePopup _losePopup;
+        [SerializeField] private EndGame _win;
+        [SerializeField] private EndGame _lose;
+        [SerializeField] private Button _restartLevelButton;
+        
+        private RestartOnGameOver _restartOnGameOver;
         
         private bool _isGameOver;
-
+        
         private void Awake()
         {
+            _restartOnGameOver = new RestartOnGameOver(_win, _lose, _restartLevelButton);
+            
             _spawner.SpawnCompleted += OnSpawnCompleted;
         }
 
@@ -30,8 +36,8 @@ namespace BaseGame.Scripts.WinLose
         {
             _isGameOver = false;
             
-            _winPopup.Hide();
-            _losePopup.Hide();
+            _win.Hide();
+            _lose.Hide();
         }
         
         public void ShowWinImmediate()
@@ -39,7 +45,7 @@ namespace BaseGame.Scripts.WinLose
             if (_isGameOver)
                 return;
             
-            _winPopup.Show();
+            _win.Show();
             _isGameOver = true;
         }
         
@@ -48,7 +54,7 @@ namespace BaseGame.Scripts.WinLose
             if(_isGameOver)
                 return;
             
-            _losePopup.Show();
+            _lose.Show();
             _isGameOver = true;
         }
         
@@ -61,7 +67,7 @@ namespace BaseGame.Scripts.WinLose
             
             if (remaining == 0)
             {
-                _winPopup.Show();
+                _win.Show();
                 _isGameOver = true;
             }
         }

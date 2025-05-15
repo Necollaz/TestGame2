@@ -11,12 +11,12 @@ namespace BaseGame.Scripts.Figure
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(FigureColliderSetup))]
-    [RequireComponent(typeof(SpecialFigureBehavior))]
+    [RequireComponent(typeof(SpecialFigureAssigner))]
     public class FigureBehaviour : MonoBehaviour, IPointerClickHandler
     {
         private FigureData _data;
         private FigureColliderSetup _figureColliderSetup;
-        private SpecialFigureBehavior _specialFigure;
+        private SpecialFigureAssigner _special;
         private SpriteRenderer _renderer;
         private Rigidbody2D _rigidbody;
         private Collider2D _collider;
@@ -31,13 +31,13 @@ namespace BaseGame.Scripts.Figure
             _renderer = GetComponent<SpriteRenderer>();
             _rigidbody = GetComponent<Rigidbody2D>();
             _figureColliderSetup = GetComponent<FigureColliderSetup>();
-            _specialFigure = GetComponent<SpecialFigureBehavior>();
+            _special = GetComponent<SpecialFigureAssigner>();
         }
         
         private void FixedUpdate()
         {
             if (_rigidbody.linearVelocity.y < 0f)
-                _specialFigure.HandleFall(this);
+                _special.HandleFall(this);
         }
 
         public void Initialize(FigureData data, ActionBarModel barModel)
@@ -55,12 +55,12 @@ namespace BaseGame.Scripts.Figure
             _figureColliderSetup.InitializeCollider(data.ShapeType);
             IsActive = true;
             
-            _specialFigure.Apply(data.SpecialType, this, barModel);
+            _special.Apply(data.SpecialType, this, barModel);
         }
         
         public void OnPointerClick(PointerEventData eventData)
         {
-            bool canClick = _specialFigure.HandleClick(this);
+            bool canClick = _special.HandleClick(this);
             
             if (!canClick)
                 return;
@@ -77,6 +77,6 @@ namespace BaseGame.Scripts.Figure
             Clicked = null;
         }
         
-        public void NotifyMatched(List<FigureBehaviour> barContents) => _specialFigure.HandleMatched(this, barContents);
+        public void NotifyMatched(List<FigureBehaviour> barContents) => _special.HandleMatched(this, barContents);
     }
 }

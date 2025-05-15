@@ -1,19 +1,17 @@
 using BaseGame.Scripts.Data;
+using UnityEngine;
 
 namespace BaseGame.Scripts.Core
 {
     public class BehaviorSelector
     {
-        private readonly RandomProvider _random;
-
         private readonly float _heavyChance;
         private readonly float _stickyChance;
         private readonly float _explosiveChance;
         private readonly float _frozenChance;
 
-        public BehaviorSelector(RandomProvider random, float heavyChance, float stickyChance, float explosiveChance, float frozenChance)
+        public BehaviorSelector(float heavyChance, float stickyChance, float explosiveChance, float frozenChance)
         {
-            _random = random;
             _heavyChance = heavyChance;
             _stickyChance = stickyChance;
             _explosiveChance = explosiveChance;
@@ -22,7 +20,7 @@ namespace BaseGame.Scripts.Core
 
         public SpecialFigureType Select(SpecialFigureType type)
         {
-            float roll = _random.Range(0f, 1f);
+            float roll = Random.Range(0f, 1f);
 
             return type switch
             {

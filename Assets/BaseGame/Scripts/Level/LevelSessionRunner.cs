@@ -7,7 +7,7 @@ namespace BaseGame.Scripts.Level
 {
     public class LevelSessionRunner : MonoBehaviour
     {
-        [SerializeField] private ResettableSpawner _spawner;
+        [SerializeField] private FigureSpawner _spawner;
         [SerializeField] private ActionBarView _actionBarView;
         
         public int ActiveOnField => _spawner.ActiveCount;
