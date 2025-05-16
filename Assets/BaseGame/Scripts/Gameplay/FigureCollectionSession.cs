@@ -16,6 +16,8 @@ namespace BaseGame.Scripts.Gameplay
         [SerializeField] private Button _resetButton;
         [SerializeField] private WinLoseEvaluator _winLoseEvaluator;
 
+        private readonly int _figuresPerGroup = 3;
+        
         private int _collectedCount;
         
         private void Awake()
@@ -60,14 +62,16 @@ namespace BaseGame.Scripts.Gameplay
 
         private void OnResetPressed()
         {
-            int totalOriginally = _spawner.TotalRequested;
-            int toSpawn = Mathf.Max(0, totalOriginally - _collectedCount);
-            
             _spawner.Stop();
             _actionBarView.Reset();
             _winLoseEvaluator.ResetState();
             _collectedCount = 0;
 
+            int remainingOnField = _levelSessionRunner.ActiveOnField;
+            int groups = Mathf.Max(1, remainingOnField / _figuresPerGroup);
+            int toSpawn = groups * _figuresPerGroup;
+            _collectedCount = 0;
+            
             _levelSessionRunner.ResetLevel(toSpawn);
         }
     }

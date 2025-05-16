@@ -1,7 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using BaseGame.Scripts.Level;
 using BaseGame.Scripts.UI;
-using UnityEngine.UI;
 
 namespace BaseGame.Scripts.WinLose
 {
@@ -17,7 +17,6 @@ namespace BaseGame.Scripts.WinLose
         [SerializeField] private Button _restartLevelButton;
         
         private RestartOnGameOver _restartOnGameOver;
-        
         private bool _isGameOver;
         
         private void Awake()

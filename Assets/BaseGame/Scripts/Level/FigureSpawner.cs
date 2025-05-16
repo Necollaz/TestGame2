@@ -21,12 +21,15 @@ namespace BaseGame.Scripts.Level
         [SerializeField, Min(1)] private int _maxFigures = 60;
         [SerializeField, Range(0.01f, 0.5f)] private float _spawnInterval = 0.05f;
         [SerializeField] private float _horizontalRange = 5f;
-
+        [SerializeField] private float _shapeHalfWidth = 0.5f;
+            
+        private readonly int _figuresPerGroup = 3;
+        
         private TripletFactory _factory;
         private ActionBarModel _barModel;
         private ObjectPool<FigureBehaviour> _pool;
         private Coroutine _spawnRoutine;
-        private IReadOnlyList<FigureData> _spawnList;
+        private IReadOnlyList<SpawnInfo> _spawnList;
         
         private int _spawnSessionId; 
         private int _totalRequested;
@@ -53,7 +56,7 @@ namespace BaseGame.Scripts.Level
             
             Stop();
             
-            int groupCount = desiredCount / 3;
+            int groupCount = desiredCount / _figuresPerGroup;
 
             _spawnList = _factory.CreateByGroupCount(groupCount);
             _totalRequested = _spawnList.Count;
@@ -76,14 +79,14 @@ namespace BaseGame.Scripts.Level
 
         private IEnumerator SpawnCoroutine(int sessionId)
         {
-            foreach (FigureData data in _spawnList)
+            foreach (SpawnInfo info in _spawnList)
             {
                 if (!_isSpawning || sessionId != _spawnSessionId)
                     yield break;
 
                 FigureBehaviour figureBehaviour = _pool.Get();
                 figureBehaviour.transform.position = GetRandomPosition();
-                figureBehaviour.Initialize(data, _barModel);
+                figureBehaviour.Initialize(info.Template, _barModel, info.Shape);
 
                 ActiveCount++;
                 
@@ -103,10 +106,11 @@ namespace BaseGame.Scripts.Level
 
         private Vector3 GetRandomPosition()
         {
-            Vector3 basePosition = _spawnPoint.position;
-            float x = Random.Range(-_horizontalRange, _horizontalRange);
+            float leftBound  = _spawnPoint.position.x - _horizontalRange  + _shapeHalfWidth;
+            float rightBound = _spawnPoint.position.x + _horizontalRange  - _shapeHalfWidth;
+            float x = Random.Range(leftBound, rightBound);
 
-            return new Vector3(basePosition.x + x, basePosition.y, basePosition.z);
+            return new Vector3(x, _spawnPoint.position.y, _spawnPoint.position.z);
         }
 
         public void ReturnToPool(FigureBehaviour figureBehaviour)

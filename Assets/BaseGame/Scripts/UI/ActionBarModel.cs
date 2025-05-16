@@ -50,8 +50,8 @@ namespace BaseGame.Scripts.UI
 
         private void CheckTriples()
         {
-            var group = _items.GroupBy(figure => (figure.Data.Color, figure.Data.SweetnessCategory)).
-                FirstOrDefault(group => group.Count() >= _figuresPerGroup);
+            var group = _items.GroupBy(figure => (figure.Data.Color, figure.CurrentShape, figure.Data.SweetnessCategory))
+                .FirstOrDefault(group => group.Count() >= _figuresPerGroup);
 
             if (group == null)
                 return;

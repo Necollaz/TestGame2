@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using BaseGame.Scripts.Data;
 using BaseGame.Scripts.Figure;
 
 namespace BaseGame.Scripts.UI
 {
     public class ActionBarView : MonoBehaviour
     {
-        [SerializeField] private List<Image> _slots;
+        [SerializeField] private List<Image> _backgroundSlots;
+        [SerializeField] private List<Image> _foregroundSlots;
 
-        private readonly float _slotSize = 100f;
+        private readonly float _slotSize = 20f;
         
         private ActionBarModel _model;
         
@@ -35,7 +35,7 @@ namespace BaseGame.Scripts.UI
                 _model.TripleRemoved -= OnTripleRemoved;
             }
 
-            _model = new ActionBarModel(_slots.Count);
+            _model = new ActionBarModel(_backgroundSlots.Count);
             
             _model.ItemsChanged += RefreshUI;
             _model.Full += OnFull;
@@ -46,24 +46,26 @@ namespace BaseGame.Scripts.UI
 
         private void RefreshUI(List<FigureBehaviour> items)
         {
-            for (int i = 0; i < _slots.Count; i++)
+            for (int i = 0; i < _backgroundSlots.Count; i++)
             {
-                int dataIndex = i < items.Count ? i : -1;
-                int slotIndex = i;
-
-                if (dataIndex >= 0)
+                if (i < items.Count)
                 {
-                    FigureData figData = items[dataIndex].Data;
-                    Image slot = _slots[slotIndex];
-
-                    slot.sprite = figData.Sprite;
-                    slot.color = Color.white;
-                    slot.rectTransform.sizeDelta = new Vector2(_slotSize, _slotSize);
-                    slot.gameObject.SetActive(true);
+                    FigureBehaviour figure = items[i];
+                    
+                    string path = $"Backgrounds/{figure.CurrentShape}_{figure.Data.Color}";
+                    _backgroundSlots[i].sprite = Resources.Load<Sprite>(path);
+                    _backgroundSlots[i].color  = Color.white;
+                    _backgroundSlots[i].gameObject.SetActive(true);
+                    
+                    _foregroundSlots[i].sprite = figure.Data.Sprite;
+                    _foregroundSlots[i].color = Color.white;
+                    _foregroundSlots[i].rectTransform.sizeDelta = new Vector2(_slotSize, _slotSize);
+                    _foregroundSlots[i].gameObject.SetActive(true);
                 }
                 else
                 {
-                    _slots[slotIndex].gameObject.SetActive(false);
+                    _backgroundSlots[i].gameObject.SetActive(false);
+                    _foregroundSlots[i].gameObject.SetActive(false);
                 }
             }
         }
